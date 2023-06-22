@@ -17,7 +17,7 @@ contract MiPrimerToken is
         _mint(msg.sender, 10 ** 6 * 10 ** decimals());
     }
 
-    function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
+    function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }
 
