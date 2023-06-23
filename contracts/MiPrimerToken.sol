@@ -14,6 +14,8 @@ contract MiPrimerToken is
 {
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC20_init(_name, _symbol);
+        __Ownable_init();
+        __UUPSUpgradeable_init();
         _mint(msg.sender, 10 ** 6 * 10 ** decimals());
     }
 
