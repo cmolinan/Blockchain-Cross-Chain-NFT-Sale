@@ -1,0 +1,12 @@
+{
+  "name": "MOCHE-collection-legendario#27",
+  "description": "NFT MOCHE collection, inspired by the fertility huacos of the Peruvian Moche culture",
+  "image": "ipfs://QmWU4yb225aTpyWkBQKAffjLaPhFKyWYiiPKbUvJPx6eou/27.png",
+  "attributes": [
+    { "trait_type": "MANTO", "value": "MANTO TIERRA" },
+    { "trait_type": "BANCO", "value": "TRONCO" },
+    { "trait_type": "CUY", "value": "CUY MANDINGO" },
+    { "trait_type": "CHULLO", "value": "CHULLO CUSCO" },
+    { "trait_type": "CARA", "value": "LENTES" }
+  ]
+}

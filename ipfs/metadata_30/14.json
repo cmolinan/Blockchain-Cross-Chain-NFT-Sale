@@ -1,0 +1,12 @@
+{
+  "name": "MOCHE-collection-raro#14",
+  "description": "NFT MOCHE collection, inspired by the fertility huacos of the Peruvian Moche culture",
+  "image": "ipfs://QmWU4yb225aTpyWkBQKAffjLaPhFKyWYiiPKbUvJPx6eou/14.png",
+  "attributes": [
+    { "trait_type": "MANTO", "value": "MANTO MARINO" },
+    { "trait_type": "BANCO", "value": "METAL" },
+    { "trait_type": "CUY", "value": "CUY PLATA" },
+    { "trait_type": "CHULLO", "value": "CHULLO PESCADOR" },
+    { "trait_type": "CARA", "value": "OJOS BASE" }
+  ]
+}
