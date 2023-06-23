@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.18;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
@@ -11,21 +11,22 @@ contract MiPrimerNft {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     constructor() /**ERC721("MiPrimerNft", "MPRNFT") */ {
-        // _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        // _grantRole(PAUSER_ROLE, msg.sender);
-        // _grantRole(MINTER_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(PAUSER_ROLE, msg.sender);
+        _grantRole(MINTER_ROLE, msg.sender);
     }
 
-    // function _baseURI() internal pure override returns (string memory) {
-    //     return "ipfs://CREA UN CID EN IPFS/";
-    // }
+    function _baseURI() internal pure override returns (string memory) {
+        return "ipfs://QmXcuyR7xGKWzpvyTzKXo9rUkV94PDa7DFRU9jWPYdrWVx/";
+        
+    }
 
     function pause() public {
-        // _pause();
+        _pause();
     }
 
     function unpause() public {
-        // _unpause();
+        _unpause();
     }
 
     function safeMint(address to, uint256 id) public {
