@@ -1,7 +1,7 @@
 {
-  "name": "MOCHE#11",
-  "description": "NFT MOCHE collection by Pachacuy.io inspired by the fertility huacos of the Peruvian Moche culture",
-  "image": "ipfs://[enter the CID here]/11.png",
+  "name": "MOCHE-collection-raro#11",
+  "description": "NFT MOCHE collection, inspired by the fertility huacos of the Peruvian Moche culture",
+  "image": "ipfs://QmWU4yb225aTpyWkBQKAffjLaPhFKyWYiiPKbUvJPx6eou/11.png",
   "attributes": [
     { "trait_type": "MANTO", "value": "MANTO COSTA" },
     { "trait_type": "BANCO", "value": "METAL" },
