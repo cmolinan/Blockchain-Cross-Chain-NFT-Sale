@@ -64,7 +64,7 @@ contract PublicSale is
         // 4 - el _id se encuentre entre 1 y 30
         //         * Mensaje de error: "NFT: Token id out of range"
 
-        require( tokensSold[_id], "Public Sale: id not available");         
+        require( !tokensSold[_id], "Public Sale: id not available");         
         require( _id >=1 && _id <=30, "NFT: Token id out of range");
 
         // Obtener el precio segun el id
