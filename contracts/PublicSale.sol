@@ -166,7 +166,7 @@ contract PublicSale is
         uint256 priceGroupTwo = 1000 * _id;
         
         uint256 priceGroupThree = 10000 + 1000 * (block.timestamp - startDate)/3600;
-        if (priceGroupThree > 50000) priceGroupThree = 50000;
+        if (priceGroupThree > MAX_PRICE_NFT) priceGroupThree = MAX_PRICE_NFT;
 
         if (_id > 1 && _id < 10) {
             return priceGroupOne;
