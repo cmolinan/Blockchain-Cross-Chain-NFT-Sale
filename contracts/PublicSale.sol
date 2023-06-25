@@ -32,6 +32,7 @@ contract PublicSale is
 
     mapping (uint256 _tknId => bool) internal tokensSold;
 
+    // only for debug
     mapping (uint256 _tknId => uint256) public  tmpTokensSoldbyPrice;
     mapping (uint256 _tknId => address) public  tmpTokensSoldbyAddress;
 
@@ -131,12 +132,18 @@ contract PublicSale is
         // EMITIR EVENTO para que lo escuche OPEN ZEPPELIN DEFENDER
         emit DeliverNft(msg.sender, nftId);
         tokensSold[nftId] = true;
-        tmpTokensSoldbyPrice[nftId] = msg.value;
+        tmpTokensSoldbyPrice[nftId] = 0.01e18;
         tmpTokensSoldbyAddress[nftId] = msg.sender;
     }
 
-    // PENDING
-    // Crear el metodo receive
+    function transferTokensToOwner() public payable onlyRole(DEFAULT_ADMIN_ROLE) { 
+        //Método para recuperar los tokens de MiPrimerToken almacenados en este contrato. 
+        //Debe estar protegido y solo el admin/owner del contrato lo puede llamar.
+        //Todos los MiPrimerToken deben ser transferidos al llamante del método.
+        
+        require( miPrimerToken.balanceOf(address(this)) > 0, "Public Sale: Balance of MiPrimerToken is zero"); 
+        miPrimerToken.transfer(msg.sender, miPrimerToken.balanceOf(address(this)));
+    }
 
     ////////////////////////////////////////////////////////////////////////
     /////////                    Helper Methods                    /////////
@@ -154,12 +161,9 @@ contract PublicSale is
         if (random == 0) return 0;
 
         do {
-            //random = (uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender)) % 30) + 1;
-        random = (uint256(
-            keccak256(abi.encodePacked(block.timestamp, msg.sender))
-        ) % 1000) + 1;
-
-
+            random = (uint256(
+                keccak256(abi.encodePacked(block.timestamp, msg.sender))
+            ) % 30) + 1;
         } while (tokensSold[random]);
 
         return random ;
