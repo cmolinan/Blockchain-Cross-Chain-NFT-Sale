@@ -23,7 +23,7 @@ contract PublicSale is
     uint256 constant startDate = 1686960000;
 
     // Maximo price NFT
-    uint256 constant MAX_PRICE_NFT = 50000 * 10 ** 18;
+    uint256 constant MAX_PRICE_NFT = 50000;
 
     // Gnosis Safe
     address gnosisSafeWallet;   // Setter in Constructor
@@ -31,6 +31,9 @@ contract PublicSale is
     event DeliverNft(address winnerAccount, uint256 nftId);
 
     mapping (uint256 _tknId => bool) internal tokensSold;
+
+    mapping (uint256 _tknId => uint256) public  tmpTokensSoldbyPrice;
+    mapping (uint256 _tknId => address) public  tmpTokensSoldbyAddress;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -85,6 +88,8 @@ contract PublicSale is
         // EMITIR EVENTO para que lo escuche OPEN ZEPPELIN DEFENDER
         emit DeliverNft(msg.sender, _id);
         tokensSold[_id] = true;
+        tmpTokensSoldbyPrice[_id] = priceNft;
+        tmpTokensSoldbyAddress[_id] = msg.sender;        
     }
 
     function depositEthForARandomNft() public payable {
@@ -100,7 +105,7 @@ contract PublicSale is
             revert("Sorry, no Tokens available");                
         }
 
-        if (msg.value < 0.01 ether) { //se devolveran los ethers
+        if (msg.value < 0.01e18) { //se devolveran los ethers
             payable(msg.sender).transfer(msg.value);
             revert("You have less than 0.01 ether");
         }
@@ -109,7 +114,7 @@ contract PublicSale is
         // SUGERENCIA: Usar gnosisSafeWallet.call para enviar el ether
         // Validar los valores de retorno de 'call' para saber si se envio el ether correctamente
         (bool success, bytes memory error) = payable(gnosisSafeWallet).call{
-            value: 0.01 ether,
+            value: 0.01e18,
             gas: 5000000
         }("");
 
@@ -117,15 +122,17 @@ contract PublicSale is
     
         // Dar el cambio al usuario
         // El vuelto seria equivalente a: msg.value - 0.01 ether
-        if (msg.value > 0.01 ether) {
+        if (msg.value > 0.01e18) {
             // logica para dar cambio
             // usar '.transfer' para enviar ether de vuelta al usuario            
-            payable(msg.sender).transfer(msg.value - 0.01 ether);
+            payable(msg.sender).transfer(msg.value - 0.01e18);
         }
 
         // EMITIR EVENTO para que lo escuche OPEN ZEPPELIN DEFENDER
         emit DeliverNft(msg.sender, nftId);
         tokensSold[nftId] = true;
+        tmpTokensSoldbyPrice[nftId] = msg.value;
+        tmpTokensSoldbyAddress[nftId] = msg.sender;
     }
 
     // PENDING
@@ -160,21 +167,17 @@ contract PublicSale is
 
     // Según el id del NFT, devuelve el precio. Existen 3 grupos de precios
     function _getPriceById(uint256 _id) internal view returns (uint256) {
-        
-        uint256 priceGroupOne = 500;
-        
-        uint256 priceGroupTwo = 1000 * _id;
-        
-        uint256 priceGroupThree = 10000 + 1000 * (block.timestamp - startDate)/3600;
-        if (priceGroupThree > MAX_PRICE_NFT) priceGroupThree = MAX_PRICE_NFT;
+      
+        uint256 priceGroupOne = 500;        
+        if (_id >= 1 && _id <= 10) return priceGroupOne;
 
-        if (_id > 1 && _id < 10) {
-            return priceGroupOne;
-        } else if (_id > 11 && _id < 20) {
-            return priceGroupTwo;
-        } else {
-            return priceGroupThree;
-        }
+        uint256 priceGroupTwo = 1000 * _id;        
+        if (_id >= 11 && _id <= 20) return priceGroupTwo;        
+
+        uint256 priceGroupThree = 10000 + 150 * (block.timestamp - startDate)/3600;
+        
+        if (priceGroupThree > MAX_PRICE_NFT) priceGroupThree = MAX_PRICE_NFT;        
+        return priceGroupThree;        
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {
