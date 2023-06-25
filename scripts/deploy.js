@@ -42,7 +42,7 @@ async function deployMumbai() {
 }
 
 async function deployPublicSale() {
-  var MiPrimerTokenAddress = "0x0Ace802b29936f9F4B2d5b2F5Aa56468bf999932";
+  var MiPrimerTokenAddress = "0xb428ca84e6B8EE3237306349bf5c388c1f4E86e1";
   var GnosisSafeWallet = "0x655252000B5aC35239C9B7F112d3F252874763f4";
   
   var psContract = await deploySC("PublicSale", [MiPrimerTokenAddress, GnosisSafeWallet]);
@@ -73,11 +73,3 @@ deployPublicSale()  //have to run in Goerli Chain !!
   console.error(error);
   process.exitCode = 1; // exitcode quiere decir fallor por error, terminacion fatal
 });
-
-
-// async function deployGoerli() {
-//   // gnosis safe
-//   // Crear un gnosis safe en https://gnosis-safe.io/app/
-//   // Extraer el address del gnosis safe y pasarlo al contrato con un setter
-//   var gnosis = { address: "" };
-// }
