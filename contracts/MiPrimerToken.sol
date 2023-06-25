@@ -12,6 +12,11 @@ contract MiPrimerToken is
     UUPSUpgradeable,
     OwnableUpgradeable
 {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
     function initialize(string memory _name, string memory _symbol) public initializer {
         __ERC20_init(_name, _symbol);
         __Ownable_init();
