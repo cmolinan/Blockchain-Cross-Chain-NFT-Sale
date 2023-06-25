@@ -41,6 +41,15 @@ async function deployMumbai() {
   await verify(implementation, "MiPrimerNft", []);  
 }
 
+async function deployPublicSale() {
+  var MiPrimerTokenAddress = "0xb428ca84e6B8EE3237306349bf5c388c1f4E86e1";
+  var GnosisSafeWallet = "0x655252000B5aC35239C9B7F112d3F252874763f4";
+  
+  var psContract = await deploySC("PublicSale", [MiPrimerTokenAddress, GnosisSafeWallet]);
+  var implementation = await printAddress("PublicSale", psContract.address);
+
+  await verify(implementation, "PublicSale", []);  
+}
 
 var MINTER_ROLE = getRole("MINTER_ROLE");
 
@@ -58,10 +67,9 @@ deployMumbai()  //have to run in Mumbai Chain !!
   process.exitCode = 1; // exitcode quiere decir fallor por error, terminacion fatal
 });
 
-
-// async function deployGoerli() {
-//   // gnosis safe
-//   // Crear un gnosis safe en https://gnosis-safe.io/app/
-//   // Extraer el address del gnosis safe y pasarlo al contrato con un setter
-//   var gnosis = { address: "" };
-// }
+deployPublicSale()  //have to run in Goerli Chain !!
+.then(() => process.exit(0))
+.catch((error) => {
+  console.error(error);
+  process.exitCode = 1; // exitcode quiere decir fallor por error, terminacion fatal
+});
