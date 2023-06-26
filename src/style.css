@@ -1,0 +1,17 @@
+body {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  padding: 5% 20px;
+  color: black;
+  background-color: rgb(210, 219, 207);
+  width: 60%;
+  margin: auto;
+  border: solid 1px black;
+}
+
+#usdcBalance,
+#miPrimerTknBalance,
+#account {
+  font-weight: bold;
+}
