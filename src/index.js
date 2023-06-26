@@ -64,9 +64,8 @@ function setUpListeners() {
     
   var usdcBalanceBtn = document.getElementById("usdcUpdate");
   var usdcValuePrint = document.getElementById("usdcBalance");
-  usdcBalanceBtn.addEventListener("click", async function () {
-    
-    document.getElementById
+
+  usdcBalanceBtn.addEventListener("click", async function () {  
     try {
       var res = await usdcTkContract.balanceOf(account);
       var value = ethers.utils.formatUnits(res, 6);
@@ -76,14 +75,11 @@ function setUpListeners() {
     } catch (error) {
       console.log(error.reason);
     }
-
   });
 
   var mptknBalanceBtn = document.getElementById("miPrimerTknUpdate");
   var mptknValuePrint = document.getElementById("miPrimerTknBalance");
   mptknBalanceBtn.addEventListener("click", async function () {
-    
-    document.getElementById
     try {
       var res = await miPrTokenContract.balanceOf(account);
       var value = ethers.utils.formatUnits(res, 18);
@@ -93,23 +89,34 @@ function setUpListeners() {
     } catch (error) {
       console.log(error.reason);
     }
-
   });
 
-  var activeAuctionBttn = document.getElementById("activeAuctionBttn");
-  activeAuctionBttn.addEventListener("click", async function () {
-    var list = document.getElementById("liveAuctionsList");
-    list.innerHTML = "";
+  // Purchase a Token By ID
+  var purchaseMsg = document.getElementById("purchaseMsg");
+  var purchaseBtn = document.getElementById("purchaseButton");
 
-    var res = await subastaContract.verSubastasActivas();
-    console.log(res);
-    res.forEach((subastaActiva, ix) => {
-      var child = document.createElement("li");
-      child.innerText = `Subasta ${ix + 1}: ${subastaActiva}`;
-      list.appendChild(child);
-    });
+  purchaseBtn.addEventListener("click", async function () {
+    purchaseMsg.innerText ="";
+    var tknIdInput = document.getElementById("purchaseInput");
+    if (tknIdInput.value == "") {
+      purchaseMsg.innerText ="Enter a valid Id";
+      return
+    }
+
+    try {
+      var tx = await pubSContract
+        .connect(signer)
+        .purchaseNftById(tknIdInput.value);
+      purchaseMsg.innerText = "...wait";
+      var response = await tx.wait();
+      var transactionHash = response.transactionHash;
+      console.log("Tx Hash", transactionHash);
+      purchaseMsg.innerText = "Purchase confirmed!.\nHash: " + transactionHash;
+    } catch (error) {
+      console.log(error.reason);
+      purchaseMsg.innerText=error.reason;
+    }
   });
-
   
 }
 

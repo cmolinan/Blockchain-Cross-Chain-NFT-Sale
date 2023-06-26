@@ -14,11 +14,10 @@
     </div>
 
     <div>
-        <label for="connect">
+        <label>
             <button id="connect">Conectar con Metamask</button>
         </label>
-        <span id="account"></span>
-        
+        <span id="account"></span>        
     </div>
 
     </br>
@@ -27,55 +26,62 @@
     </div>
 
     </br>
-    <h2>Balances</h2>
+    <h2>Balances (Goerli)</h2>
     <div>
-        <label for="usdcBalance">USD Coin Balance:</label>
+        <label>USD Coin Balance:</label>
         <span id="usdcBalance"></span>
         <button id="usdcUpdate">Refresh</button>
     </div>
     <div>
-        <label for="miPrimerTknBalance">Mi Primer Token Balance:</label>
+        <label>Mi Primer Token Balance:</label>
         <span id="miPrimerTknBalance"></span>
         <button id="miPrimerTknUpdate">Refresh</button>
     </div>
     </br>
 
     <h2>Mi Primer Token (Goerli)</h2>
-    </br>
     <div>
         <label for="approveInput">Approve Mi Primer Token</label>
         <input type="text" id="approveInput" name="approveInput">
         <button id="approveButton">Approve</button>
         <span id="approveError" style="color: red;"></span>
     </div>
-
-    <h2>Public Sale (Goerli)</h2>
     </br>
+    
+    <h2>Public Sale (Goerli)</h2>    
     <div>
         <label for="purchaseInput">Purchase By Id</label>
         <input type="text" id="purchaseInput" name="purchaseInput">
         <button id="purchaseButton">Purchase</button>
-        <span id="purchaseError" style="color: red;"></span>
+        <br>
+        <span id="purchaseMsg" style="color: red;"></span>
     </div>
 
     </br>
     <div>
-        <label for="purchaseEthInput">Purchase Nft (with Ether)</label>
+        <label>Purchase Nft (with Ether)</label>
         <button id="purchaseEthButton">Purchase with Ether</button>
         <span id="purchaseEthError" style="color: red;"></span>
     </div>
 
     </br>
     <div>
-        <label for="sendEtherInput">Send Ether to Contract</label>
+        <label>Send Ether to Contract</label>
         <button id="sendEtherButton">Send</button>
         <span id="sendEtherError" style="color: red;"></span>
     </div>
 
-    <h2> NFT Contract (Polygon) </h2>
     </br>
-    <div id="nftList">
+    <h2> NFT Contract (Polygon/Mumbai) </h2>
 
+    <div>
+        <label>Lista de Tokens adquiridos:</label>
+        <button id="nftListTokens">Refresh</button>        
+    </div>  
+
+    <div>        
+        <div id="nftList">
+        </div>
     </div>
 
 </body>
