@@ -48,9 +48,11 @@ function setUpListeners() {
   var bttn = document.getElementById("connect");
   bttn.addEventListener("click", async function () {
     if (window.ethereum) {
+      document.getElementById("account").innerHTML = "";
       [account] = await ethereum.request({
         method: "eth_requestAccounts",
       });
+      
       
       console.log("Billetera metamask", account);
 
@@ -67,6 +69,7 @@ function setUpListeners() {
 
   usdcBalanceBtn.addEventListener("click", async function () {  
     try {
+      usdcValuePrint.innerText = "";
       var res = await usdcTkContract.balanceOf(account);
       var value = ethers.utils.formatUnits(res, 6);
       console.log(value);
@@ -81,6 +84,7 @@ function setUpListeners() {
   var mptknValuePrint = document.getElementById("miPrimerTknBalance");
   mptknBalanceBtn.addEventListener("click", async function () {
     try {
+      mptknValuePrint.innerText = "";
       var res = await miPrTokenContract.balanceOf(account);
       var value = ethers.utils.formatUnits(res, 18);
       console.log(value);
@@ -90,6 +94,37 @@ function setUpListeners() {
       console.log(error.reason);
     }
   });
+
+  // Approve MiPrimerToken
+  var approveErr = document.getElementById("approveError");
+  var approveBtn = document.getElementById("approveButton");
+  
+  approveErr.innerText ="(amount with 18 decimals!)";
+
+  approveBtn.addEventListener("click", async function () {
+    
+    var valueForApproveInp = document.getElementById("approveInput");
+    if (valueForApproveInp.value == "") {
+      approveErr.innerText ="Enter a valid amount with 18 decimals";
+      return
+    }
+
+    try {
+      var tx = await miPrTokenContract
+        .connect(signer)
+        .approve(miPrTokenContract.address, valueForApproveInp.value);
+        approveErr.innerText = "...wait";
+      var response = await tx.wait();
+      var transactionHash = response.transactionHash;
+      console.log("Tx Hash", transactionHash);
+      approveErr.innerText = "Approved confirmed for "+ valueForApproveInp.value +"\nHash: " + transactionHash;
+      valueForApproveInp.value = "";
+    } catch (error) {
+      console.log(error.reason);
+      approveErr.innerText=error.reason;
+    }
+  });
+
 
   // Purchase a Token By ID
   var purchaseMsg = document.getElementById("purchaseMsg");
@@ -111,7 +146,8 @@ function setUpListeners() {
       var response = await tx.wait();
       var transactionHash = response.transactionHash;
       console.log("Tx Hash", transactionHash);
-      purchaseMsg.innerText = "Purchase confirmed!.\nHash: " + transactionHash;
+      purchaseMsg.innerText = "Purchase confirmed for Token #" + tknIdInput.value + "\nHash: " + transactionHash;
+      tknIdInput.value = "";
     } catch (error) {
       console.log(error.reason);
       purchaseMsg.innerText=error.reason;
