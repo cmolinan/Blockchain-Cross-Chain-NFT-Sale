@@ -7,7 +7,6 @@ window.ethers = ethers;
 var provider, signer, account;
 var usdcTkContract, miPrTokenContract, nftTknContract, pubSContract;
 
-
 // REQUIRED
 // Conectar con metamask
 function initSCs() {
@@ -37,10 +36,10 @@ function initSCs() {
 // No require conexion con Metamask
 // Usar JSON-RPC
 // Se pueden escuchar eventos de los contratos usando el provider con RPC
-function initSCsMumbai() {
-  var nftAddress;
-  nftTknContract; // = new Contract...
-}
+// function initSCsMumbai() {
+//   var nftAddress;
+//   nftTknContract; // = new Contract...
+// }
 
 function setUpListeners() {
   // Connect to Metamask
@@ -63,7 +62,8 @@ function setUpListeners() {
       document.getElementById("account").innerHTML = account;
     }
   });
-    
+  
+  //Balance of USDCoin
   var usdcBalanceBtn = document.getElementById("usdcUpdate");
   var usdcValuePrint = document.getElementById("usdcBalance");
 
@@ -80,6 +80,7 @@ function setUpListeners() {
     }
   });
 
+  //Balance of MiPrimerToken
   var mptknBalanceBtn = document.getElementById("miPrimerTknUpdate");
   var mptknValuePrint = document.getElementById("miPrimerTknBalance");
   mptknBalanceBtn.addEventListener("click", async function () {
@@ -153,13 +154,49 @@ function setUpListeners() {
       purchaseMsg.innerText=error.reason;
     }
   });
+ 
+  // Purchase NFT (with Ether)
+  var purchaseEthBtn = document.getElementById("purchaseEthButton");
+  var purchaseEthErr = document.getElementById("purchaseEthError");
+
+  purchaseEthBtn.addEventListener("click", async function () {  
+    try {
+      purchaseEthErr.innerText = "";
+    
+      var response = await pubSContract
+      .connect(signer)
+      .depositEthForARandomNft();
+
+      var transactionHash = response.transactionHash;
+      purchaseEthErr.innerText = "Purchased confirmed with Hash: " + transactionHash;
+      
+      console.log(transactionHash);      
+
+    } catch (error) {
+      console.log(error.reason);
+    }
+  });
+
+
+}
+
+// Setup for receive events of PublicSale Contract
+var showListOfTokens = document.getElementById("nftList");
+function setUpEventsContracts() {  
+  pubSContract.on("DeliverNft", (winnerAccount, nftId) => {
+    var tokenNum = ethers.utils.formatUnits(nftId, 0);
+    
+    var child = document.createElement("li");
+    child.innerText = `Token #${tokenNum} was purchased by: ${winnerAccount}`;
+    showListOfTokens.appendChild(child);
+
+    console.log("Account", winnerAccount);
+    console.log("Token #", tokenNum);
+  });
+
+}
+
   
-}
-
-function setUpEventsContracts() {
-  // nftTknContract.on
-}
-
 async function setUp() {
 
   setUpListeners();  
