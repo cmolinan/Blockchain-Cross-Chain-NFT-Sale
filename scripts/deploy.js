@@ -29,8 +29,8 @@ async function deployTokens() {
 
 async function deployMumbai() {
   var relayerAddress = "0x9ba986566f59441E2F7d7A30Eb2A935ccEE58fc7";
-  var name = "MiPrimerNft";
-  var symbol = "MPRNFT";
+  var name = "First NFT";
+  var symbol = "1stNFT";
 
   var nftContract = await deploySC("MiPrimerNft", [name, symbol]);
   var implementation = await printAddress("NFT", nftContract.address);
@@ -43,7 +43,9 @@ async function deployMumbai() {
 
 async function deployPublicSale() {
   var MiPrimerTokenAddress = "0xb428ca84e6B8EE3237306349bf5c388c1f4E86e1";
-  var GnosisSafeWallet = "0x655252000B5aC35239C9B7F112d3F252874763f4";
+  // var GnosisSafeWallet = "0x655252000B5aC35239C9B7F112d3F252874763f4";
+  // Carlos Safe Wallet:
+  var GnosisSafeWallet = "0x87bbc079221b4079565D9373dd8D142e659ffef2";
   
   var psContract = await deploySC("PublicSale", [MiPrimerTokenAddress, GnosisSafeWallet]);
   var implementation = await printAddress("PublicSale", psContract.address);
