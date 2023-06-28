@@ -166,11 +166,14 @@ function setUpListeners() {
 
   purchaseEthBtn.addEventListener("click", async function () {  
     try {
-      purchaseEthErr.innerText = "";
-    
-      var response = await pubSContract
+      purchaseEthErr.innerText = "...connecting to Wallet";    
+      var tx = await pubSContract
       .connect(signer)
-      .depositEthForARandomNft();
+      .depositEthForARandomNft({
+        value: '10000000000000000',
+      });
+      purchaseEthErr.innerText = "...transaction sent. Please wait";
+      var response = await tx.wait();
 
       var transactionHash = response.transactionHash;
       purchaseEthErr.innerText = "Purchased confirmed with Hash: " + transactionHash;
