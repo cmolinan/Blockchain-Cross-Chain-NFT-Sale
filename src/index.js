@@ -18,10 +18,13 @@ function initSCs() {
   var usdcTknAbi = require("../artifacts/contracts/USDCoin.sol/USDCoin.json").abi;
   var publicSaleAbi = require("../artifacts/contracts/PublicSale.sol/PublicSale.json").abi; 
 
-  var nftTknAdd = "0x9e03a5f5447af8A0Df23F663a86EcDf62aC1B571";
+  var nftTknAdd = "0xe97de0F932de655C7edd7685324415B541DAE71e";
+  //var nftTknAdd = "0x9e03a5f5447af8A0Df23F663a86EcDf62aC1B571";  antiguo
   var miPrTknAdd = "0xb428ca84e6B8EE3237306349bf5c388c1f4E86e1";
   var usdcAddress = "0xCF66961da28482626a0481CD8ca489aF6F6d9E71";
-  var pubSContractAdd = "0xC680831a80b32a3332512638498d108C4cAE0B1F";
+
+  var pubSContractAdd = "0x551E9eae12bb838BeA2f0D0335B3A7164eF2D242";
+  //var pubSContractAdd = "0xC680831a80b32a3332512638498d108C4cAE0B1F"; antiguo
   
 
   nftTknContract = new Contract(nftTknAdd, nftTknAbi, provider);
@@ -100,10 +103,10 @@ function setUpListeners() {
   var approveErr = document.getElementById("approveError");
   var approveBtn = document.getElementById("approveButton");
   
-  approveErr.innerText ="(amount with 18 decimals!)";
+  approveErr.innerText ="(amount with 18 decimals! -> 000000000000000000 )";
 
   approveBtn.addEventListener("click", async function () {
-    
+    approveErr.innerText = "...connecting to Wallet";
     var valueForApproveInp = document.getElementById("approveInput");
     if (valueForApproveInp.value == "") {
       approveErr.innerText ="Enter a valid amount with 18 decimals";
@@ -111,10 +114,11 @@ function setUpListeners() {
     }
 
     try {
+      approveErr.innerText = "...connecting to Wallet";
       var tx = await miPrTokenContract
         .connect(signer)
-        .approve(miPrTokenContract.address, valueForApproveInp.value);
-        approveErr.innerText = "...wait";
+        .approve(pubSContract.address, valueForApproveInp.value.trim());
+      approveErr.innerText = "...transaction sent. Please wait";
       var response = await tx.wait();
       var transactionHash = response.transactionHash;
       console.log("Tx Hash", transactionHash);
@@ -140,10 +144,11 @@ function setUpListeners() {
     }
 
     try {
+      purchaseMsg.innerText = "...connecting to Wallet";
       var tx = await pubSContract
         .connect(signer)
-        .purchaseNftById(tknIdInput.value);
-      purchaseMsg.innerText = "...wait";
+        .purchaseNftById(tknIdInput.value.trim());
+      purchaseMsg.innerText = "...transaction sent. Please wait";
       var response = await tx.wait();
       var transactionHash = response.transactionHash;
       console.log("Tx Hash", transactionHash);
