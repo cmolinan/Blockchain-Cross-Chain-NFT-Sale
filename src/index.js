@@ -18,7 +18,7 @@ function initSCs() {
   var usdcTknAbi = require("../artifacts/contracts/USDCoin.sol/USDCoin.json").abi;
   var publicSaleAbi = require("../artifacts/contracts/PublicSale.sol/PublicSale.json").abi; 
 
-  var nftTknAdd = "0xe97de0F932de655C7edd7685324415B541DAE71e";
+  var nftTknAdd = "0x0A34c64e44f4Ea55fCD285aDD229AfE19d9eB8A6";
   //var nftTknAdd = "0x9e03a5f5447af8A0Df23F663a86EcDf62aC1B571";  antiguo
   var miPrTknAdd = "0xb428ca84e6B8EE3237306349bf5c388c1f4E86e1";
   var usdcAddress = "0xCF66961da28482626a0481CD8ca489aF6F6d9E71";

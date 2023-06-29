@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract MiPrimerNft is Initializable, ERC721Upgradeable, PausableUpgradeable, AccessControlUpgradeable, ERC721BurnableUpgradeable, UUPSUpgradeable {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -18,12 +19,25 @@ contract MiPrimerNft is Initializable, ERC721Upgradeable, PausableUpgradeable, A
         _disableInitializers();
     }
 
-    function initialize(string memory _name, string memory _symbol) initializer public {
+    string internal baseURI;
+   
+    function setBaseURI(string memory _baseURI) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        baseURI = _baseURI;
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        _requireMinted(tokenId);
+        return bytes(baseURI).length > 0 ? string.concat(baseURI, Strings.toString(tokenId)) : "";
+    }
+
+    function initialize(string memory _name, string memory _symbol, string memory _baseURI) initializer public {
         __ERC721_init(_name, _symbol);
         __Pausable_init();
         __AccessControl_init();
         __ERC721Burnable_init();
         __UUPSUpgradeable_init();
+
+        baseURI = _baseURI;
 
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(PAUSER_ROLE, msg.sender);
@@ -31,10 +45,7 @@ contract MiPrimerNft is Initializable, ERC721Upgradeable, PausableUpgradeable, A
         _grantRole(UPGRADER_ROLE, msg.sender);
     }
 
-    function _baseURI() internal pure override returns (string memory) {
-        return "ipfs://QmXcuyR7xGKWzpvyTzKXo9rUkV94PDa7DFRU9jWPYdrWVx/";
-    }
-
+   
     function pause() public onlyRole(PAUSER_ROLE) {
         _pause();
     }
