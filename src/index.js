@@ -87,6 +87,7 @@ function setUpListeners() {
   var mptknBalanceBtn = document.getElementById("miPrimerTknUpdate");
   var mptknValuePrint = document.getElementById("miPrimerTknBalance");
   mptknBalanceBtn.addEventListener("click", async function () {
+    mptknBalanceBtn.disabled = true;
     try {
       mptknValuePrint.innerText = "";
       var res = await miPrTokenContract.balanceOf(account);
@@ -97,6 +98,7 @@ function setUpListeners() {
     } catch (error) {
       console.log(error.reason);
     }
+    mptknBalanceBtn.disabled = false;
   });
 
   // Approve MiPrimerToken
@@ -106,10 +108,12 @@ function setUpListeners() {
   approveErr.innerText ="(amount with 18 decimals! -> 000000000000000000 )";
 
   approveBtn.addEventListener("click", async function () {
+    approveBtn.disabled = true;
     approveErr.innerText = "...connecting to Wallet";
     var valueForApproveInp = document.getElementById("approveInput");
     if (valueForApproveInp.value == "") {
       approveErr.innerText ="Enter a valid amount with 18 decimals";
+      approveBtn.disabled = false;
       return
     }
 
@@ -128,6 +132,7 @@ function setUpListeners() {
       console.log(error.reason);
       approveErr.innerText=error.reason;
     }
+    approveBtn.disabled = false;
   });
 
 
@@ -136,10 +141,12 @@ function setUpListeners() {
   var purchaseBtn = document.getElementById("purchaseButton");
 
   purchaseBtn.addEventListener("click", async function () {
+    purchaseBtn.disabled = true;
     purchaseMsg.innerText ="";
     var tknIdInput = document.getElementById("purchaseInput");
     if (tknIdInput.value == "") {
       purchaseMsg.innerText ="Enter a valid Id";
+      purchaseBtn.disabled = false;
       return
     }
 
@@ -158,6 +165,7 @@ function setUpListeners() {
       console.log(error.reason);
       purchaseMsg.innerText=error.reason;
     }
+    purchaseBtn.disabled = false;
   });
  
   // Purchase NFT (with Ether)
@@ -165,6 +173,7 @@ function setUpListeners() {
   var purchaseEthErr = document.getElementById("purchaseEthError");
 
   purchaseEthBtn.addEventListener("click", async function () {  
+    purchaseEthBtn.disabled = true;
     try {
       purchaseEthErr.innerText = "...connecting to Wallet";    
       var tx = await pubSContract
@@ -183,6 +192,7 @@ function setUpListeners() {
     } catch (error) {
       console.log(error.reason);
     }
+    purchaseEthBtn.disabled = false;
   });
 
 
