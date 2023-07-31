@@ -6,9 +6,9 @@ window.ethers = ethers;
 
 var provider, signer, account;
 var usdcTkContract, miPrTokenContract, nftTknContract, pubSContract;
+var jsonProvider, nftTknContractForJson; 
 
-// REQUIRED
-// Conectar con metamask
+
 function initSCs() {
   provider = new providers.Web3Provider(window.ethereum);
 
@@ -32,17 +32,12 @@ function initSCs() {
   usdcTkContract = new Contract(usdcAddress, usdcTknAbi, provider);
   pubSContract = new Contract(pubSContractAdd, publicSaleAbi, provider);
   
+  // JSON Provider to catch up events emitted in Mumbai chain
+  jsonProvider = new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/polygon_mumbai');
+  nftTknContractForJson  = new ethers.Contract(nftTknAdd, nftTknAbi, jsonProvider);
 }
 
 
-// OPTIONAL
-// No require conexion con Metamask
-// Usar JSON-RPC
-// Se pueden escuchar eventos de los contratos usando el provider con RPC
-// function initSCsMumbai() {
-//   var nftAddress;
-//   nftTknContract; // = new Contract...
-// }
 
 function setUpListeners() {
   // Connect to Metamask
@@ -200,7 +195,12 @@ function setUpListeners() {
 
 // Setup for receive events of PublicSale Contract
 var showListOfTokens = document.getElementById("nftList");
+
+// Setup for receive events of NFT  Contract
+var showMumbaiEvents = document.getElementById("mumbaiNftListEvents");
+
 function setUpEventsContracts() {  
+
   pubSContract.on("DeliverNft", (winnerAccount, nftId) => {
     var tokenNum = ethers.utils.formatUnits(nftId, 0);
     
@@ -211,6 +211,34 @@ function setUpEventsContracts() {
     console.log("Account", winnerAccount);
     console.log("Token #", tokenNum);
   });
+
+  nftTknContractForJson.on('Transfer', (from, to, tokenId) => {         
+    var child = document.createElement("li");
+    child.innerText = `Token id #${tokenId} has been transfer to ${to} by ${from}`;
+    showMumbaiEvents.appendChild(child);
+
+    console.log("Token Id#", tokenId, " has been transfer from: ", from, " To: ", to, account);
+  });
+
+
+  nftTknContractForJson.on('Paused', (account) => {    
+        
+    var child = document.createElement("li");
+    child.innerText = `NFT Smart Contract has been PAUSED by ${account}`;
+    showMumbaiEvents.appendChild(child);
+
+    console.log("Paused by ", account);
+  });
+
+  nftTknContractForJson.on('Unpaused', (account) => {            
+    var child = document.createElement("li");
+    child.innerText = `Event Upaused by ${account}`;
+    child.innerText = `NFT Smart Contract has been UNPAUSED by ${account}`;
+    showMumbaiEvents.appendChild(child);
+
+    console.log("Unpaused by ", account);
+  });
+
 
 }
 
